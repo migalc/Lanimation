@@ -13,6 +13,15 @@
 		8C19EDA3238010A3008D5ECB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C19EDA1238010A3008D5ECB /* Main.storyboard */; };
 		8C19EDA5238010A6008D5ECB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C19EDA4238010A6008D5ECB /* Assets.xcassets */; };
 		8C19EDA8238010A6008D5ECB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C19EDA6238010A6008D5ECB /* LaunchScreen.storyboard */; };
+		8CB9722B2380159400C8DEC2 /* LNDBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9722A2380159400C8DEC2 /* LNDBaseViewController.swift */; };
+		8CB9722D238015BA00C8DEC2 /* LNDBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9722C238015BA00C8DEC2 /* LNDBaseView.swift */; };
+		8CB972312380168E00C8DEC2 /* LNDTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB972302380168E00C8DEC2 /* LNDTabBar.swift */; };
+		8CB9723423801C0800C8DEC2 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9723323801C0800C8DEC2 /* SecondViewController.swift */; };
+		8CB9723623801C2A00C8DEC2 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9723523801C2A00C8DEC2 /* MainTabBarViewController.swift */; };
+		8CB9723823801E8500C8DEC2 /* LNDCoachmarkHandlerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9723723801E8500C8DEC2 /* LNDCoachmarkHandlerViewController.swift */; };
+		8CB9723A23802AE900C8DEC2 /* LNDTabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9723923802AE900C8DEC2 /* LNDTabBarItem.swift */; };
+		8CB9723D23802FCC00C8DEC2 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9723C23802FCC00C8DEC2 /* UIView+Extensions.swift */; };
+		8CFE5D9123805F5A00CAB20E /* LNDCoachmarkOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFE5D9023805F5A00CAB20E /* LNDCoachmarkOverlayView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +33,15 @@
 		8C19EDA4238010A6008D5ECB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8C19EDA7238010A6008D5ECB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8C19EDA9238010A6008D5ECB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8CB9722A2380159400C8DEC2 /* LNDBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNDBaseViewController.swift; sourceTree = "<group>"; };
+		8CB9722C238015BA00C8DEC2 /* LNDBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNDBaseView.swift; sourceTree = "<group>"; };
+		8CB972302380168E00C8DEC2 /* LNDTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNDTabBar.swift; sourceTree = "<group>"; };
+		8CB9723323801C0800C8DEC2 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		8CB9723523801C2A00C8DEC2 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
+		8CB9723723801E8500C8DEC2 /* LNDCoachmarkHandlerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNDCoachmarkHandlerViewController.swift; sourceTree = "<group>"; };
+		8CB9723923802AE900C8DEC2 /* LNDTabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNDTabBarItem.swift; sourceTree = "<group>"; };
+		8CB9723C23802FCC00C8DEC2 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
+		8CFE5D9023805F5A00CAB20E /* LNDCoachmarkOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNDCoachmarkOverlayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +120,12 @@
 		8C19EDB3238013EF008D5ECB /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				8CFE5D8F23805F3D00CAB20E /* Views */,
+				8CB9723B23802FB900C8DEC2 /* Extensions */,
+				8CB9723223801BE300C8DEC2 /* Coachmark */,
 				8C19EDB4238013FB008D5ECB /* Tab Bar */,
+				8CB9722A2380159400C8DEC2 /* LNDBaseViewController.swift */,
+				8CB9722C238015BA00C8DEC2 /* LNDBaseView.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -110,6 +133,8 @@
 		8C19EDB4238013FB008D5ECB /* Tab Bar */ = {
 			isa = PBXGroup;
 			children = (
+				8CB972302380168E00C8DEC2 /* LNDTabBar.swift */,
+				8CB9723923802AE900C8DEC2 /* LNDTabBarItem.swift */,
 			);
 			path = "Tab Bar";
 			sourceTree = "<group>";
@@ -118,6 +143,8 @@
 			isa = PBXGroup;
 			children = (
 				8C19ED9F238010A3008D5ECB /* ViewController.swift */,
+				8CB9723323801C0800C8DEC2 /* SecondViewController.swift */,
+				8CB9723523801C2A00C8DEC2 /* MainTabBarViewController.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -129,6 +156,30 @@
 				8C19EDA6238010A6008D5ECB /* LaunchScreen.storyboard */,
 			);
 			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		8CB9723223801BE300C8DEC2 /* Coachmark */ = {
+			isa = PBXGroup;
+			children = (
+				8CB9723723801E8500C8DEC2 /* LNDCoachmarkHandlerViewController.swift */,
+			);
+			path = Coachmark;
+			sourceTree = "<group>";
+		};
+		8CB9723B23802FB900C8DEC2 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				8CB9723C23802FCC00C8DEC2 /* UIView+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		8CFE5D8F23805F3D00CAB20E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8CFE5D9023805F5A00CAB20E /* LNDCoachmarkOverlayView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,9 +253,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8CB972312380168E00C8DEC2 /* LNDTabBar.swift in Sources */,
+				8CB9723823801E8500C8DEC2 /* LNDCoachmarkHandlerViewController.swift in Sources */,
+				8CB9723623801C2A00C8DEC2 /* MainTabBarViewController.swift in Sources */,
+				8CB9723A23802AE900C8DEC2 /* LNDTabBarItem.swift in Sources */,
 				8C19EDA0238010A3008D5ECB /* ViewController.swift in Sources */,
+				8CB9722B2380159400C8DEC2 /* LNDBaseViewController.swift in Sources */,
+				8CB9722D238015BA00C8DEC2 /* LNDBaseView.swift in Sources */,
+				8CB9723423801C0800C8DEC2 /* SecondViewController.swift in Sources */,
 				8C19ED9C238010A3008D5ECB /* AppDelegate.swift in Sources */,
 				8C19ED9E238010A3008D5ECB /* SceneDelegate.swift in Sources */,
+				8CB9723D23802FCC00C8DEC2 /* UIView+Extensions.swift in Sources */,
+				8CFE5D9123805F5A00CAB20E /* LNDCoachmarkOverlayView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,6 +411,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VNFY2URN36;
 				INFOPLIST_FILE = "$(SRCROOT)/Lanimation/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -369,6 +430,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VNFY2URN36;
 				INFOPLIST_FILE = "$(SRCROOT)/Lanimation/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

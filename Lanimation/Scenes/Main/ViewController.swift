@@ -8,11 +8,15 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: LNDBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        view.backgroundColor = .white
+        
+        title = "View 1"
+        tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 1)
     }
 
 }
