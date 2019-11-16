@@ -29,7 +29,9 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
     private lazy var _destinationPath: CGPath! = nil
     private lazy var _transparentLayer: CAShapeLayer? = nil
     
-    private var _extraRadius: CGFloat = 2
+    private var _scaleFactor: CGFloat = 0.85
+    
+    private var _extraRadius: CGFloat = 4
     
     // MARK: Initializers
     
@@ -59,8 +61,7 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
         _destinationRadius = radius
         
         if _transparentLayer == nil {
-            _transparentLayer = CALayer.createTransparentLayer(viewRect: bounds, viewColor: _overlayColor, targetOrigin: _destinationRect.origin, targetWidth: _transparentViewSize.width, targetHeight: _transparentViewSize.height, layerOpacity: 1)
-            layer.mask = _transparentLayer
+            initializeTransparentView()
         }
         
         startAnimations()
@@ -85,10 +86,26 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
     }
     
     private func getAnimationList() -> [CAAnimation] {
-        let translationAnimations = createTranslationAnimations()
+        let translationAnimations = createTranslationAnimations(isInitial: _destinationRect == _originRect)
         let scaleAnimations = createScaleAnimation()
         
         return [scaleAnimations, translationAnimations].flatMap { $0 }
+    }
+    
+    private func initializeTransparentView() {
+        _originRect = _destinationRect
+        _originRadius = _destinationRadius
+        
+        let transform = CGAffineTransform(translationX: _transparentViewSize.width * _scaleFactor/2, y: _transparentViewSize.height * _scaleFactor/2)
+        
+        _transparentLayer = CALayer.createTransparentLayer(viewRect: frame,
+                                                           viewColor: _overlayColor,
+                                                           targetOrigin: calculateMidpoint(between: _originRect.origin.applying(transform), and: _destinationRect.origin.applying(transform)),
+                                                           targetWidth: 0,
+                                                           targetHeight: 0,
+                                                           cornerRadius: _destinationRadius,
+                                                           layerOpacity: 1)
+        layer.mask = _transparentLayer
     }
     
     private func createScaleAnimation() -> [CAAnimation] {
@@ -112,20 +129,19 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
         return [scaleAnimation]
     }
     
-    private func createTranslationAnimations() -> [CAAnimation] {
-        let firstAnimation = createFirstTranslationAnimation()
+    private func createTranslationAnimations(isInitial: Bool) -> [CAAnimation] {
+        let factor: CGFloat = isInitial ? 1 : _scaleFactor
+        let firstAnimation = createFirstTranslationAnimation(targetSize: CGSize(width: _transparentViewSize.width * factor, height: _transparentViewSize.height * factor))
         let secondAnimation = createSecondTranslationAnimation(from: firstAnimation)
         return [firstAnimation, secondAnimation]
     }
     
-    private func createFirstTranslationAnimation() -> CABasicAnimation {
-        let midPoint = CGPoint(x: (_originRect.origin.x + _destinationRect.origin.x) / 2, y: (_originRect.origin.y + _destinationRect.origin.y) / 2)
-
+    private func createFirstTranslationAnimation(targetSize: CGSize) -> CABasicAnimation {
         let newLayer = CALayer.createTransparentLayer(viewRect: frame,
                                                     viewColor: _overlayColor,
-                                                    targetOrigin: midPoint,
-                                                    targetWidth: _transparentViewSize.width * 0.85,
-                                                    targetHeight:_transparentViewSize.height * 0.85,
+                                                    targetOrigin: calculateMidpoint(between: _originRect.origin, and: _destinationRect.origin),
+                                                    targetWidth: targetSize.width ,
+                                                    targetHeight: targetSize.height,
                                                     cornerRadius: _originRadius)
         
         let animation = CABasicAnimation(keyPath: "path")
@@ -157,6 +173,10 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
         _destinationPath = newLayer2.path
         
         return animation2
+    }
+    
+    private func calculateMidpoint(between point1: CGPoint, and point2: CGPoint) -> CGPoint {
+        return CGPoint(x: (point1.x + point2.x) / 2, y: (point1.y + point2.y) / 2)
     }
     
 }

@@ -70,8 +70,6 @@ extension CALayer {
         fillLayer.fillColor = viewColor.cgColor
         fillLayer.opacity = layerOpacity
 
-//        layer.mask = fillLayer
-        
         return fillLayer
     }
     
