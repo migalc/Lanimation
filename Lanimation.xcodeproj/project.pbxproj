@@ -56,15 +56,79 @@
 		8C19ED9A238010A3008D5ECB /* Lanimation */ = {
 			isa = PBXGroup;
 			children = (
-				8C19ED9B238010A3008D5ECB /* AppDelegate.swift */,
-				8C19ED9D238010A3008D5ECB /* SceneDelegate.swift */,
-				8C19ED9F238010A3008D5ECB /* ViewController.swift */,
-				8C19EDA1238010A3008D5ECB /* Main.storyboard */,
-				8C19EDA4238010A6008D5ECB /* Assets.xcassets */,
-				8C19EDA6238010A6008D5ECB /* LaunchScreen.storyboard */,
-				8C19EDA9238010A6008D5ECB /* Info.plist */,
+				8C19EDB2238013E9008D5ECB /* Scenes */,
+				8C19EDB1238013E3008D5ECB /* Supporting Files */,
+				8C19EDB0238013D9008D5ECB /* Resources */,
+				8C19EDAF238013D0008D5ECB /* Application Delegates */,
 			);
 			path = Lanimation;
+			sourceTree = "<group>";
+		};
+		8C19EDAF238013D0008D5ECB /* Application Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				8C19ED9B238010A3008D5ECB /* AppDelegate.swift */,
+				8C19ED9D238010A3008D5ECB /* SceneDelegate.swift */,
+			);
+			path = "Application Delegates";
+			sourceTree = "<group>";
+		};
+		8C19EDB0238013D9008D5ECB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8C19EDA4238010A6008D5ECB /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		8C19EDB1238013E3008D5ECB /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				8C19EDA9238010A6008D5ECB /* Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8C19EDB2238013E9008D5ECB /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				8C19EDB623801428008D5ECB /* Storyboards */,
+				8C19EDB523801419008D5ECB /* Main */,
+				8C19EDB3238013EF008D5ECB /* Shared */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		8C19EDB3238013EF008D5ECB /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				8C19EDB4238013FB008D5ECB /* Tab Bar */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		8C19EDB4238013FB008D5ECB /* Tab Bar */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Tab Bar";
+			sourceTree = "<group>";
+		};
+		8C19EDB523801419008D5ECB /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				8C19ED9F238010A3008D5ECB /* ViewController.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		8C19EDB623801428008D5ECB /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				8C19EDA1238010A3008D5ECB /* Main.storyboard */,
+				8C19EDA6238010A6008D5ECB /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -286,7 +350,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VNFY2URN36;
-				INFOPLIST_FILE = Lanimation/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Lanimation/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -304,7 +368,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VNFY2URN36;
-				INFOPLIST_FILE = Lanimation/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Lanimation/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
