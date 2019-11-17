@@ -15,7 +15,17 @@ protocol LNDCoachmarkOverlayViewProtocol {
 }
 
 protocol LNDCoachmarkOverlayViewDelegate: class {
+    func didStartAnimation()
+    func willEndAnimation()
+    func didEndAnimation()
     func toggledUserInteraction(isEnabled: Bool)
+}
+
+extension LNDCoachmarkOverlayViewDelegate {
+    func didStartAnimation() { print("\(#function) not implemented") }
+    func willEndAnimation() { print("\(#function) not implemented") }
+    func didEndAnimation() { print("\(#function) not implemented") }
+    func toggledUserInteraction(isEnabled: Bool) { print("\(#function) not implemented") }
 }
 
 // MARK: Coachmark Overlay View
@@ -197,20 +207,32 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
                        y: point1.y + heightOffset)
     }
     
+    private func startTimerAnimation(for duration: TimeInterval) {
+        Timer.scheduledTimer(withTimeInterval: duration*0.8, repeats: false, block: { [weak self] _ in
+            guard let self = self else { return }
+            self.delegate?.willEndAnimation()
+        })
+    }
+    
 }
 
 extension LNDCoachmarkOverlayView: CAAnimationDelegate {
     
     func animationDidStart(_ anim: CAAnimation) {
+        print("\(#function) - \(Date())")
         isUserInteractionEnabled = false
+        startTimerAnimation(for: anim.duration)
         delegate?.toggledUserInteraction(isEnabled: isUserInteractionEnabled)
+        delegate?.didStartAnimation()
         print("didStart, anim = \(anim)")
     }
     
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         print("didstop, finished = \(flag)")
+        print("\(#function) - \(Date())")
         isUserInteractionEnabled = true
         delegate?.toggledUserInteraction(isEnabled: isUserInteractionEnabled)
+        delegate?.didEndAnimation()
         guard flag else { return }
         _transparentLayer?.path = _destinationPath
     }

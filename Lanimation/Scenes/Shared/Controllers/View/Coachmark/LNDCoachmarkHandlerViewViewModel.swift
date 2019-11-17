@@ -76,7 +76,7 @@ class LNDCoachmarkHandlerViewViewModel: LNDCoachmarkHandlerViewModelProtocol {
     var initialAnimationDelay: Double { return _animationDuration / 5 }
     var currentTitleTag: Int { return _currentTitleTag }
     var currentDescriptionTag: Int { return _currentDescriptionTag }
-    var navigationBarRightButtonTitle: String { return isLastView() ? "Next" : "Done" }
+    var navigationBarRightButtonTitle: String { return isLastView() ? "Done" : "Next" }
     
     // MARK: Protocol functions
     
