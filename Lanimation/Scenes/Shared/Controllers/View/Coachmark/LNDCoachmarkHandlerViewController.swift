@@ -10,6 +10,10 @@ import UIKit
 
 // MARK: - Protocols
 
+protocol LNDCoachmarkHandlerViewDelegate: class {
+    func willEndAnimation(for view: UIView)
+}
+
 protocol LNDCoachmarkHandlerView {
     func setViewModel(for viewModel: LNDCoachmarkHandlerViewViewModel)
 }
@@ -19,6 +23,8 @@ protocol LNDCoachmarkHandlerView {
 class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHandlerView {
     
     // MARK: - Properties
+    
+    weak var delegate: LNDCoachmarkHandlerViewDelegate?
     
     private lazy var _viewModel: LNDCoachmarkHandlerViewViewModel! = LNDCoachmarkHandlerViewViewModel(views: [])
     
@@ -248,11 +254,13 @@ private extension LNDCoachmarkHandlerViewController {
 }
 
 extension LNDCoachmarkHandlerViewController: LNDCoachmarkOverlayViewDelegate {
+    func willEndAnimation() {
+        delegate?.willEndAnimation(for: _viewModel.nextView)
+    }
     
     func toggledUserInteraction(isEnabled: Bool) {
         _navigationBar.enableRightButton(enable: isEnabled)
     }
-    
 }
 
 extension LNDCoachmarkHandlerViewController: LNDNavigationBarDelegate {

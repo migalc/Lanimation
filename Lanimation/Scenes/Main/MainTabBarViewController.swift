@@ -62,6 +62,7 @@ extension MainTabBarViewController: VCDelegate {
     func showCoachmarks() {
         let vc = LNDCoachmarkHandlerViewController()
         vc.modalPresentationStyle = .custom
+        vc.delegate = self
         vc.transitioningDelegate = self
         let items = lndTabBar.getTabItems()
             .enumerated()
@@ -80,3 +81,8 @@ extension MainTabBarViewController: UIViewControllerTransitioningDelegate {
     
 }
 
+extension MainTabBarViewController: LNDCoachmarkHandlerViewDelegate {
+    func willEndAnimation(for view: UIView) {
+        view.animateColor(color: UIColor.white.withAlphaComponent(0.5))
+    }
+}

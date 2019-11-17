@@ -48,6 +48,17 @@ extension UIView {
         layer.mask = layer
     }
     
+    func animateColor(withDuration: TimeInterval = 0.5, delay: TimeInterval = 0, color: UIColor) {
+        let originalColor = self.backgroundColor
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: withDuration,
+                                                       delay: delay,
+                                                       options: [.curveEaseInOut, .autoreverse], animations: { [weak self] in
+            guard let self = self else { return }
+            self.backgroundColor = color
+            self.backgroundColor = originalColor
+        }, completion: nil)
+    }
+    
 }
 
 extension CALayer {
