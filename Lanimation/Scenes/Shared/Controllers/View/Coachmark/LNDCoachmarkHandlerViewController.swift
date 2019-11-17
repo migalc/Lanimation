@@ -21,23 +21,6 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     // MARK: - Properties
     
     private lazy var _viewModel: LNDCoachmarkHandlerViewViewModel! = LNDCoachmarkHandlerViewViewModel(views: [])
-    private var _currentIndex: Int = -1
-    private var _animationDuration: Double = 1
-    
-    private var _previousView: UIView {
-        return _views[max(0, _currentIndex)]
-    }
-    private var _nextView: UIView {
-        return _views[min(_views.count-1, _currentIndex)]
-    }
-    
-    private var _currentTitleTag: Int {
-        return max(0, _currentIndex) + 1
-    }
-    
-    private var _currentDescriptionTag: Int {
-        return (max(0, _currentIndex) + 1) * 1000
-    }
     
     private lazy var _centerYLabelConstraints: [NSLayoutConstraint] = []
     private lazy var _centerXLabelConstraints: [NSLayoutConstraint] = []
@@ -45,12 +28,8 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     
     // MARK: - Subviews
     
-    private var _views: [UIView] {
-        return _viewModel.views.map { $0.view }
-    }
-    
     private lazy var _navigationBar: LNDNavigationBar = {
-        let navigationBar = LNDNavigationBar(rightButtonText: "Next")
+        let navigationBar = LNDNavigationBar(rightButtonText: _viewModel.navigationBarRightButtonTitle)
         navigationBar.delegate = self
         return navigationBar
     }()
@@ -82,8 +61,8 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        _lblCurrentTitle.text = _viewModel.views.first?.title
-        _lblCurrentDescription.text = _viewModel.views.first?.description
+        _lblCurrentTitle.text = _viewModel.getTitle()
+        _lblCurrentDescription.text = _viewModel.getDescription()
         animateInitialLabels()
     }
     
@@ -152,18 +131,23 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     }
     
     private func createLayerView() -> LNDCoachmarkOverlayView {
-        return LNDCoachmarkOverlayView(color: Theme.Colors.legendBlue, animationTotal: _animationDuration)
+        return LNDCoachmarkOverlayView(color: _viewModel.overlayColor,
+                                       animationTotal: _viewModel.animationDuration)
     }
     
     private func addNextLabels() {
-        _lblNextTitle = addTitleLabel(with: _layerView.bounds.width, title: _viewModel.views[_currentIndex].title)
-        _lblNextDescription = addDescriptionLabel(with: _layerView.bounds.width, description: _viewModel.views[_currentIndex].description)
+        _lblNextTitle = addTitleLabel(with: _layerView.bounds.width,
+                                      title: _viewModel.getTitle())
+        
+        _lblNextDescription = addDescriptionLabel(with: _layerView.bounds.width,
+                                                  description: _viewModel.getDescription())
+        
         view.layoutIfNeeded()
     }
     
     @discardableResult
     private func addTitleLabel(with widthOffset: CGFloat = 0, heightOffset: CGFloat = 10, title: String) -> LNDLabel {
-        let label = LNDLabel(text: title, tag: _currentTitleTag)
+        let label = LNDLabel(text: title, tag: _viewModel.currentTitleTag)
         _layerView.addSubview(label)
         
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -181,10 +165,10 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     @discardableResult
     private func addDescriptionLabel(with widthOffset: CGFloat, topOffset: CGFloat = 10, description: String) -> LNDLabel {
         
-        let label = LNDLabel(text: description, tag: _currentDescriptionTag)
+        let label = LNDLabel(text: description, tag: _viewModel.currentDescriptionTag)
         _layerView.addSubview(label)
         
-        let titleLabel = _layerView.subviews.first(where: { $0.tag == _currentTitleTag })!
+        let titleLabel = _layerView.subviews.first(where: { $0.tag == _viewModel.currentTitleTag })!
         label.translatesAutoresizingMaskIntoConstraints = false
         label.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: topOffset).isActive = true
         
@@ -196,21 +180,22 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     }
     
     private func moveToNext() {
-        _currentIndex += 1
-        guard _currentIndex < _views.count else {
-            dismiss(animated: true) {
-                print("completed")
-            }
-            return
+        _viewModel.incrementIndex()
+        guard !_viewModel.isAtEnd() else {
+            return dismissView()
         }
         handleNavigationBar()
         animateToNextView()
         animateLabels()
     }
     
-    func handleNavigationBar() {
-        guard _currentIndex == _views.endIndex - 1 else { return }
-        _navigationBar.setNextButtonTitle(with: "Done")
+    private func handleNavigationBar() {
+        guard _viewModel.isLastView() else { return }
+        _navigationBar.setNextButtonTitle(with: _viewModel.navigationBarRightButtonTitle)
+    }
+    
+    private func dismissView() {
+        dismiss(animated: true, completion: nil)
     }
     
 }
@@ -220,27 +205,29 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
 private extension LNDCoachmarkHandlerViewController {
     
     private func animateInitialLabels() {
-        UIView.animate(withDuration: _animationDuration / 2) {
+        UIView.animate(withDuration: _viewModel.initialAnimationDuration) {
             self._lblCurrentTitle.alpha = 1
         }
 
-        UIView.animate(withDuration: _animationDuration / 2, delay: _animationDuration / 5, options: [], animations: {
+        UIView.animate(withDuration: _viewModel.initialAnimationDuration,
+                       delay: _viewModel.initialAnimationDelay,
+                       options: [],
+                       animations: {
             self._lblCurrentDescription.alpha = 1
         }, completion: nil)
         return
     }
     
     private func animateToNextView() {
-        _layerView.moveTo(rect: _nextView.convert(_nextView.bounds, to: _layerView),
-                          radius: _nextView.layer.cornerRadius)
+        _layerView.moveTo(rect: _viewModel.nextView.convert(_viewModel.nextView.bounds, to: _layerView),
+                          radius: _viewModel.nextView.layer.cornerRadius)
     }
     
     private func animateLabels() {
-        guard _currentIndex > 0 else { return }
         addNextLabels()
         
         animateConstraints(for: _lblCurrentTitle, nextLabel: _lblNextTitle, completion: nil)
-        animateConstraints(for: _lblCurrentDescription, nextLabel: _lblNextDescription, delay: _animationDuration / 4, completion: nil)
+        animateConstraints(for: _lblCurrentDescription, nextLabel: _lblNextDescription, delay: _viewModel.animationDuration / 4, completion: nil)
         
         self._lblCurrentTitle = self._lblNextTitle
         self._lblCurrentDescription = self._lblNextDescription
@@ -254,7 +241,7 @@ private extension LNDCoachmarkHandlerViewController {
         _ = labelConstraints.filter { $0.firstAnchor == currentLabel.centerXAnchor }.map { constraint in constraint.constant -= _layerView.bounds.width }
         _ = nextLabelConstraints.filter { $0.firstAnchor == nextLabel.centerXAnchor }.map { constraint in constraint.constant = 0 }
         
-        UIView.animate(withDuration: _animationDuration, delay: delay, options: [.curveEaseInOut], animations: {
+        UIView.animate(withDuration: _viewModel.animationDuration, delay: delay, options: [.curveEaseInOut], animations: {
             self.view.layoutIfNeeded()
         }, completion: completion)
     }
@@ -275,7 +262,7 @@ extension LNDCoachmarkHandlerViewController: LNDNavigationBarDelegate {
     }
     
     func tappedClose() {
-        dismiss(animated: true, completion: nil)
+        dismissView()
     }
     
 }

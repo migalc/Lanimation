@@ -193,9 +193,8 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
     }
     
     private func calculateMidpoint(between point1: CGPoint, and point2: CGPoint, heightOffset: CGFloat = .zero) -> CGPoint {
-        let appliedHeightOffset = point1 == point2 ? 0 : heightOffset
         return CGPoint(x: (point1.x + point2.x) / 2,
-                       y: point1.y + appliedHeightOffset)
+                       y: point1.y + heightOffset)
     }
     
 }
