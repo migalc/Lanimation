@@ -112,7 +112,7 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
         _layerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         _layerContainerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         _layerContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        _layerContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5).isActive = true
+        _layerContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1).isActive = true
         
         _layerContainerView.layer.cornerRadius = 25
     }
