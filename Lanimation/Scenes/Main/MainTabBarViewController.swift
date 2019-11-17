@@ -23,7 +23,13 @@ class MainTabBarViewController: UIViewController {
         return list
     }()
     
-    private var lndTabBar: LNDTabBar!
+    private lazy var lndTabBar: LNDTabBar! = {
+        let tabBar = LNDTabBar()
+        
+        tabBar.setTabItems(for: _viewControllersList)
+        
+        return tabBar
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,19 +42,17 @@ class MainTabBarViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         showCoachmarks()
+        lndTabBar.updateConstraints()
     }
-
+    
     private func setupTabBar() {
-        let tabBar = LNDTabBar()
+        guard let tabBar = lndTabBar else { return }
         view.addSubview(tabBar)
         tabBar.translatesAutoresizingMaskIntoConstraints = false
-        tabBar.bottomAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.bottomAnchor, multiplier: 1).isActive = true
+        tabBar.bottomAnchor.constraint(equalToSystemSpacingBelow: view.bottomAnchor, multiplier: 1).isActive = true
         tabBar.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        tabBar.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 1).isActive = true
-        tabBar.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        tabBar.setTabItems(for: _viewControllersList)
-
-        lndTabBar = tabBar
+        tabBar.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
+        tabBar.heightAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
     }
     
     private func setupVC() {

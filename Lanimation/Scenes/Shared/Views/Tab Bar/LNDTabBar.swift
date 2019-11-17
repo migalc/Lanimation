@@ -28,9 +28,15 @@ class LNDTabBar: LNDBaseView {
     weak var delegate: LNDTabBarDelegate?
     private var _containerStackView: UIStackView!
     private lazy var _viewControllers: [LNDBaseViewController] = []
+    private let _heightConstant: CGFloat = 60
     
     // MARK: Initializers
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        heightAnchor.constraint(equalToConstant: _heightConstant + safeAreaInsets.bottom).isActive = true
+    }
+
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupViews()
@@ -75,10 +81,10 @@ class LNDTabBar: LNDBaseView {
         addSubview(stackView)
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        stackView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         stackView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
         stackView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        stackView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        stackView.heightAnchor.constraint(equalToConstant: _heightConstant).isActive = true
         _containerStackView = stackView
     }
     
