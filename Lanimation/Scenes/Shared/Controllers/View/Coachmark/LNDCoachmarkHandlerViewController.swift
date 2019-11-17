@@ -157,7 +157,8 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
         _layerView.addSubview(label)
         
         label.translatesAutoresizingMaskIntoConstraints = false
-        let anchorY = label.centerYAnchor.constraint(equalTo: _layerView.centerYAnchor, constant: heightOffset)
+        // MIGUEL: label.centerYAnchor.constraint(equalToSystemSpacingBelow: _layerView.centerYAnchor, multiplier: 0.75) is not working, why?
+        let anchorY = NSLayoutConstraint(item: label, attribute: .centerY, relatedBy: .equal, toItem: _layerView, attribute: .centerY, multiplier: 0.75, constant: 0)
         _centerYLabelConstraints.append(anchorY)
         
         let anchorX = label.centerXAnchor.constraint(equalTo: _layerView.centerXAnchor, constant: widthOffset)
@@ -176,12 +177,19 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
         
         let titleLabel = _layerView.subviews.first(where: { $0.tag == _viewModel.currentTitleTag })!
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: topOffset).isActive = true
+        
+        let topAnchor = label.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: 10)
+        
+        let anchorY = NSLayoutConstraint(item: label, attribute: .centerY, relatedBy: .equal, toItem: _layerView, attribute: .centerY, multiplier: 1, constant: 0)
+        anchorY.priority = .defaultHigh
         
         let anchorX = label.centerXAnchor.constraint(equalTo: _layerView.centerXAnchor, constant: widthOffset)
         anchorX.isActive = true
         
         _nextLabelsCenterXLabelConstraints.append(anchorX)
+        
+        NSLayoutConstraint.activate([anchorX, anchorY, topAnchor])
+        
         return label
     }
     
