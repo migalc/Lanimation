@@ -76,7 +76,7 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
     // MARK: Private helper Functions
     
     private func setupViews() {
-        backgroundColor = _overlayColor
+        backgroundColor = _overlayColor.withAlphaComponent(0.8)
     }
     
     private func startAnimations() {

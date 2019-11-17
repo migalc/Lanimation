@@ -20,6 +20,7 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     
     // MARK: - Properties
     
+    private lazy var _viewModel: LNDCoachmarkHandlerViewViewModel! = LNDCoachmarkHandlerViewViewModel(views: [])
     private var _currentIndex: Int = -1
     private var _animationDuration: Double = 1
     private var _previousView: UIView {
@@ -38,11 +39,10 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     }
     
     private lazy var _centerYLabelConstraints: [NSLayoutConstraint] = []
-    private lazy var _nextLabelsCenterYLabelConstraints: [NSLayoutConstraint] = []
+    private lazy var _centerXLabelConstraints: [NSLayoutConstraint] = []
+    private lazy var _nextLabelsCenterXLabelConstraints: [NSLayoutConstraint] = []
     
     // MARK: - Subviews
-    
-    private lazy var _viewModel: LNDCoachmarkHandlerViewViewModel! = LNDCoachmarkHandlerViewViewModel(views: [])
     
     private var _views: [UIView] {
         return _viewModel.views.map { $0.view }
@@ -73,6 +73,8 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        _lblCurrentTitle.text = _viewModel.views.first?.title
+        _lblCurrentDescription.text = _viewModel.views.first?.description
         animateInitialLabels()
     }
     
@@ -126,51 +128,55 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     }
     
     private func setupInitialLabels() {
-        _lblCurrentTitle = addTitleLabel(with: 0)
-        _lblCurrentDescription = addDescriptionLabel(with: 0)
+        _lblCurrentTitle = addTitleLabel(with: 0, title: "")
+        _lblCurrentDescription = addDescriptionLabel(with: 0, description: "")
         _lblCurrentTitle.alpha = 0
         _lblCurrentDescription.alpha = 0
         
-        _centerYLabelConstraints = _nextLabelsCenterYLabelConstraints
+        _centerXLabelConstraints = _nextLabelsCenterXLabelConstraints
     }
     
     private func createLayerView() -> UIView {
-        return LNDCoachmarkOverlayView(color: UIColor.blue.withAlphaComponent(0.9), animationTotal: _animationDuration)
+        return LNDCoachmarkOverlayView(color: UIColor.blue, animationTotal: _animationDuration)
     }
     
     private func addNextLabels() {
-        _lblNextTitle = addTitleLabel(with: _layerView.bounds.width)
-        _lblNextDescription = addDescriptionLabel(with: _layerView.bounds.width)
+        _lblNextTitle = addTitleLabel(with: _layerView.bounds.width, title: _viewModel.views[_currentIndex].title)
+        _lblNextDescription = addDescriptionLabel(with: _layerView.bounds.width, topOffset: 10, description: _viewModel.views[_currentIndex].description)
+        view.layoutIfNeeded()
     }
     
     @discardableResult
-    private func addTitleLabel(with widthOffset: CGFloat) -> LNDLabel {
-        let label = LNDLabel(text: "Test Title \(_currentIndex)", tag: _currentTitleTag)
+    private func addTitleLabel(with widthOffset: CGFloat = 0, heightOffset: CGFloat = 0, title: String) -> LNDLabel {
+        let label = LNDLabel(text: title, tag: _currentTitleTag)
         _layerView.addSubview(label)
         
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.centerYAnchor.constraint(equalTo: _layerView.centerYAnchor).isActive = true
-        let anchorX = label.centerXAnchor.constraint(equalTo: _layerView.centerXAnchor, constant: widthOffset)
-        anchorX.isActive = true
+        let anchorY = label.centerYAnchor.constraint(equalTo: _layerView.centerYAnchor, constant: heightOffset)
+        _centerYLabelConstraints.append(anchorY)
         
-        _nextLabelsCenterYLabelConstraints.append(anchorX)
+        let anchorX = label.centerXAnchor.constraint(equalTo: _layerView.centerXAnchor, constant: widthOffset)
+        _nextLabelsCenterXLabelConstraints.append(anchorX)
+        
+        NSLayoutConstraint.activate([anchorX, anchorY])
         
         return label
     }
     
     @discardableResult
-    private func addDescriptionLabel(with widthOffset: CGFloat) -> LNDLabel {
-        let label = LNDLabel(text: "Test Description \(_currentIndex)", tag: _currentDescriptionTag)
+    private func addDescriptionLabel(with widthOffset: CGFloat, topOffset: CGFloat = 0, description: String) -> LNDLabel {
+        
+        let label = LNDLabel(text: description, tag: _currentDescriptionTag)
         _layerView.addSubview(label)
         
         let titleLabel = _layerView.subviews.first(where: { $0.tag == _currentTitleTag })!
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
+        label.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: topOffset).isActive = true
         
         let anchorX = label.centerXAnchor.constraint(equalTo: _layerView.centerXAnchor, constant: widthOffset)
         anchorX.isActive = true
         
-        _nextLabelsCenterYLabelConstraints.append(anchorX)
+        _nextLabelsCenterXLabelConstraints.append(anchorX)
         return label
     }
     
@@ -186,12 +192,18 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
         animateLabels()
     }
     
+}
+
+// MARK: Animation Functions
+
+private extension LNDCoachmarkHandlerViewController {
+    
     private func animateInitialLabels() {
-        UIView.animate(withDuration: _animationDuration) {
+        UIView.animate(withDuration: _animationDuration / 2) {
             self._lblCurrentTitle.alpha = 1
         }
 
-        UIView.animate(withDuration: _animationDuration, delay: _animationDuration / 5, options: [], animations: {
+        UIView.animate(withDuration: _animationDuration / 2, delay: _animationDuration / 5, options: [], animations: {
             self._lblCurrentDescription.alpha = 1
         }, completion: nil)
         return
@@ -205,32 +217,24 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     private func animateLabels() {
         guard _currentIndex > 0 else { return }
         addNextLabels()
-        view.layoutIfNeeded()
         
         animateConstraints(for: _lblCurrentTitle, nextLabel: _lblNextTitle, completion: nil)
-        animateConstraints(for: _lblCurrentDescription, nextLabel: _lblNextDescription, delay: _animationDuration / 4, completion: { _ in
-//            self._lblCurrentTitle.removeFromSuperview()
-//            self._lblCurrentTitle = self._lblNextTitle
-//            self._lblCurrentDescription.removeFromSuperview()
-//            self._lblCurrentDescription = self._lblNextDescription
-//            self._centerYLabelConstraints = self._nextLabelsCenterYLabelConstraints
-        })
+        animateConstraints(for: _lblCurrentDescription, nextLabel: _lblNextDescription, delay: _animationDuration / 4, completion: nil)
         
         self._lblCurrentTitle = self._lblNextTitle
         self._lblCurrentDescription = self._lblNextDescription
-        self._centerYLabelConstraints = self._nextLabelsCenterYLabelConstraints
+        self._centerXLabelConstraints = self._nextLabelsCenterXLabelConstraints
     }
     
     private func animateConstraints(for currentLabel: UILabel, nextLabel: UILabel, delay: TimeInterval = 0, completion: ((Bool) -> Void)?) {
-        let labelConstraints = _centerYLabelConstraints
-        let nextLabelConstraints = _nextLabelsCenterYLabelConstraints
+        let labelConstraints = _centerXLabelConstraints
+        let nextLabelConstraints = _nextLabelsCenterXLabelConstraints
         
-        _ = labelConstraints.filter { $0.firstAnchor == currentLabel.centerXAnchor}.map { constraint in constraint.constant -= _layerView.bounds.width }
-        _ = nextLabelConstraints.filter { $0.firstAnchor == nextLabel.centerXAnchor}.map { constraint in constraint.constant = 0 }
+        _ = labelConstraints.filter { $0.firstAnchor == currentLabel.centerXAnchor }.map { constraint in constraint.constant -= _layerView.bounds.width }
+        _ = nextLabelConstraints.filter { $0.firstAnchor == nextLabel.centerXAnchor }.map { constraint in constraint.constant = 0 }
         
         UIView.animate(withDuration: _animationDuration, delay: delay, options: [.curveEaseInOut], animations: {
             self.view.layoutIfNeeded()
         }, completion: completion)
     }
-    
 }
