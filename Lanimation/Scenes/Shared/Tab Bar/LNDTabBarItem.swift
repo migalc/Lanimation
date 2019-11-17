@@ -89,10 +89,9 @@ class LNDTabBarItem: UIControl, LNDTabBarItemProtocol  {
     private func setupContentView() {
         addSubview(_contentContainerView)
         
-        
         _contentContainerView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         _contentContainerView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        _contentContainerView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.8).isActive = true
+        _contentContainerView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: _buttonLabel == nil ? 1 : 0.8).isActive = true
         _contentContainerView.widthAnchor.constraint(equalTo: heightAnchor).isActive = true
     }
     
