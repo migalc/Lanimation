@@ -14,11 +14,17 @@ protocol LNDCoachmarkOverlayViewProtocol {
     
 }
 
+protocol LNDCoachmarkOverlayViewDelegate: class {
+    func toggledUserInteraction(isEnabled: Bool)
+}
+
 // MARK: Coachmark Overlay View
 
 class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
     
     // MARK: Properties
+    
+    weak var delegate: LNDCoachmarkOverlayViewDelegate?
     
     private var _animationTotal: Double = 0
     private var _overlayColor: UIColor = .clear
@@ -61,6 +67,7 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
     // MARK: Protocol Functions
     
     func moveTo(rect: CGRect, radius: CGFloat) {
+        guard isUserInteractionEnabled else { return }
         _originRect = _destinationRect
         _originRadius = _destinationRadius
         _destinationRect = rect
@@ -192,12 +199,14 @@ extension LNDCoachmarkOverlayView: CAAnimationDelegate {
     
     func animationDidStart(_ anim: CAAnimation) {
         isUserInteractionEnabled = false
+        delegate?.toggledUserInteraction(isEnabled: isUserInteractionEnabled)
         print("didStart, anim = \(anim)")
     }
     
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         print("didstop, finished = \(flag)")
         isUserInteractionEnabled = true
+        delegate?.toggledUserInteraction(isEnabled: isUserInteractionEnabled)
         guard flag else { return }
         _transparentLayer?.path = _destinationPath
     }

@@ -18,6 +18,8 @@
 		8C30964E238177C6001107BF /* LNDCoachmarkHandlerViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C30964D238177C6001107BF /* LNDCoachmarkHandlerViewViewModel.swift */; };
 		8C30965023817CBF001107BF /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C30964F23817CBF001107BF /* CGRect+Extensions.swift */; };
 		8C309655238191ED001107BF /* LNDLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C309654238191ED001107BF /* LNDLabel.swift */; };
+		8C3096582381B109001107BF /* LNDNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3096572381B109001107BF /* LNDNavigationBar.swift */; };
+		8C30965B2381BD73001107BF /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C30965A2381BD73001107BF /* Theme.swift */; };
 		8CB9722B2380159400C8DEC2 /* LNDBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9722A2380159400C8DEC2 /* LNDBaseViewController.swift */; };
 		8CB9722D238015BA00C8DEC2 /* LNDBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9722C238015BA00C8DEC2 /* LNDBaseView.swift */; };
 		8CB972312380168E00C8DEC2 /* LNDTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB972302380168E00C8DEC2 /* LNDTabBar.swift */; };
@@ -43,6 +45,8 @@
 		8C30964D238177C6001107BF /* LNDCoachmarkHandlerViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNDCoachmarkHandlerViewViewModel.swift; sourceTree = "<group>"; };
 		8C30964F23817CBF001107BF /* CGRect+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
 		8C309654238191ED001107BF /* LNDLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNDLabel.swift; sourceTree = "<group>"; };
+		8C3096572381B109001107BF /* LNDNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNDNavigationBar.swift; sourceTree = "<group>"; };
+		8C30965A2381BD73001107BF /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		8CB9722A2380159400C8DEC2 /* LNDBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNDBaseViewController.swift; sourceTree = "<group>"; };
 		8CB9722C238015BA00C8DEC2 /* LNDBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNDBaseView.swift; sourceTree = "<group>"; };
 		8CB972302380168E00C8DEC2 /* LNDTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNDTabBar.swift; sourceTree = "<group>"; };
@@ -130,6 +134,7 @@
 		8C19EDB3238013EF008D5ECB /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				8C3096592381BD69001107BF /* Themes */,
 				8CFE5D8F23805F3D00CAB20E /* Views */,
 				8CB9723B23802FB900C8DEC2 /* Extensions */,
 				8CB9723223801BE300C8DEC2 /* Coachmark */,
@@ -177,6 +182,22 @@
 			path = Label;
 			sourceTree = "<group>";
 		};
+		8C3096562381B0DD001107BF /* Navigation Bar */ = {
+			isa = PBXGroup;
+			children = (
+				8C3096572381B109001107BF /* LNDNavigationBar.swift */,
+			);
+			path = "Navigation Bar";
+			sourceTree = "<group>";
+		};
+		8C3096592381BD69001107BF /* Themes */ = {
+			isa = PBXGroup;
+			children = (
+				8C30965A2381BD73001107BF /* Theme.swift */,
+			);
+			path = Themes;
+			sourceTree = "<group>";
+		};
 		8CB9723223801BE300C8DEC2 /* Coachmark */ = {
 			isa = PBXGroup;
 			children = (
@@ -199,6 +220,7 @@
 		8CFE5D8F23805F3D00CAB20E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				8C3096562381B0DD001107BF /* Navigation Bar */,
 				8C309653238191DD001107BF /* Label */,
 				8CFE5D9023805F5A00CAB20E /* LNDCoachmarkOverlayView.swift */,
 			);
@@ -283,8 +305,10 @@
 				8C30964E238177C6001107BF /* LNDCoachmarkHandlerViewViewModel.swift in Sources */,
 				8C30965023817CBF001107BF /* CGRect+Extensions.swift in Sources */,
 				8CB9723623801C2A00C8DEC2 /* MainTabBarViewController.swift in Sources */,
+				8C3096582381B109001107BF /* LNDNavigationBar.swift in Sources */,
 				8CB9723A23802AE900C8DEC2 /* LNDTabBarItem.swift in Sources */,
 				8C19EDA0238010A3008D5ECB /* ViewController.swift in Sources */,
+				8C30965B2381BD73001107BF /* Theme.swift in Sources */,
 				8CB9722B2380159400C8DEC2 /* LNDBaseViewController.swift in Sources */,
 				8CB9722D238015BA00C8DEC2 /* LNDBaseView.swift in Sources */,
 				8CB9723423801C0800C8DEC2 /* SecondViewController.swift in Sources */,

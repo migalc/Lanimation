@@ -23,6 +23,7 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     private lazy var _viewModel: LNDCoachmarkHandlerViewViewModel! = LNDCoachmarkHandlerViewViewModel(views: [])
     private var _currentIndex: Int = -1
     private var _animationDuration: Double = 1
+    
     private var _previousView: UIView {
         return _views[max(0, _currentIndex)]
     }
@@ -48,8 +49,16 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
         return _viewModel.views.map { $0.view }
     }
     
+    private lazy var _navigationBar: LNDNavigationBar = {
+        let navigationBar = LNDNavigationBar(rightButtonText: "Next")
+        navigationBar.delegate = self
+        return navigationBar
+    }()
+    
     private lazy var _layerView: LNDCoachmarkOverlayView! = {
-        return createLayerView() as! LNDCoachmarkOverlayView
+        let layerView = createLayerView()
+        layerView.delegate = self
+        return layerView
     }()
     
     private lazy var _layerContainerView: UIView = {
@@ -96,14 +105,20 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     
     // MARK: - Private helper functions
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        moveToNext()
-    }
-    
     private func setupViews() {
         setupContainerView()
         setupLayerView()
         setupInitialLabels()
+        setupNavigationBar()
+    }
+    
+    private func setupNavigationBar() {
+        view.addSubview(_navigationBar)
+        _navigationBar.translatesAutoresizingMaskIntoConstraints = false
+        _navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        _navigationBar.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
+        _navigationBar.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        _navigationBar.heightAnchor.constraint(equalToConstant: 44).isActive = true
     }
     
     private func setupContainerView() {
@@ -130,24 +145,24 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     private func setupInitialLabels() {
         _lblCurrentTitle = addTitleLabel(with: 0, title: "")
         _lblCurrentDescription = addDescriptionLabel(with: 0, description: "")
-        _lblCurrentTitle.alpha = 0
+        _lblCurrentTitle.alpha = 0.5
         _lblCurrentDescription.alpha = 0
         
         _centerXLabelConstraints = _nextLabelsCenterXLabelConstraints
     }
     
-    private func createLayerView() -> UIView {
-        return LNDCoachmarkOverlayView(color: UIColor.blue, animationTotal: _animationDuration)
+    private func createLayerView() -> LNDCoachmarkOverlayView {
+        return LNDCoachmarkOverlayView(color: Theme.Colors.legendBlue, animationTotal: _animationDuration)
     }
     
     private func addNextLabels() {
         _lblNextTitle = addTitleLabel(with: _layerView.bounds.width, title: _viewModel.views[_currentIndex].title)
-        _lblNextDescription = addDescriptionLabel(with: _layerView.bounds.width, topOffset: 10, description: _viewModel.views[_currentIndex].description)
+        _lblNextDescription = addDescriptionLabel(with: _layerView.bounds.width, description: _viewModel.views[_currentIndex].description)
         view.layoutIfNeeded()
     }
     
     @discardableResult
-    private func addTitleLabel(with widthOffset: CGFloat = 0, heightOffset: CGFloat = 0, title: String) -> LNDLabel {
+    private func addTitleLabel(with widthOffset: CGFloat = 0, heightOffset: CGFloat = 10, title: String) -> LNDLabel {
         let label = LNDLabel(text: title, tag: _currentTitleTag)
         _layerView.addSubview(label)
         
@@ -164,7 +179,7 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     }
     
     @discardableResult
-    private func addDescriptionLabel(with widthOffset: CGFloat, topOffset: CGFloat = 0, description: String) -> LNDLabel {
+    private func addDescriptionLabel(with widthOffset: CGFloat, topOffset: CGFloat = 10, description: String) -> LNDLabel {
         
         let label = LNDLabel(text: description, tag: _currentDescriptionTag)
         _layerView.addSubview(label)
@@ -188,8 +203,14 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
             }
             return
         }
+        handleNavigationBar()
         animateToNextView()
         animateLabels()
+    }
+    
+    func handleNavigationBar() {
+        guard _currentIndex == _views.endIndex - 1 else { return }
+        _navigationBar.setNextButtonTitle(with: "Done")
     }
     
 }
@@ -237,4 +258,24 @@ private extension LNDCoachmarkHandlerViewController {
             self.view.layoutIfNeeded()
         }, completion: completion)
     }
+}
+
+extension LNDCoachmarkHandlerViewController: LNDCoachmarkOverlayViewDelegate {
+    
+    func toggledUserInteraction(isEnabled: Bool) {
+        _navigationBar.enableRightButton(enable: isEnabled)
+    }
+    
+}
+
+extension LNDCoachmarkHandlerViewController: LNDNavigationBarDelegate {
+    
+    func tappedNext() {
+        moveToNext()
+    }
+    
+    func tappedClose() {
+        dismiss(animated: true, completion: nil)
+    }
+    
 }
