@@ -20,16 +20,17 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     
     // MARK: - Properties
     
-    private lazy var _highlightedViewLayer: CAShapeLayer = {
-        let layer = CAShapeLayer()
-        layer.fillRule = .evenOdd
-        layer.fillColor = view?.backgroundColor?.cgColor ?? UIColor.clear.cgColor
-        layer.frame = .zero
-        
-        return layer
-    }()
-    
     private var _currentIndex: Int = -1
+    
+    private var _previousView: UIView {
+        return _views[max(0, _currentIndex)]
+    }
+    private var _nextView: UIView {
+        return _views[min(_views.count-1, _currentIndex)]
+    }
+    
+    // MARK: - Subviews
+    
     private lazy var _views: [UIView] = {
         return [UIView]()
     }()
@@ -38,12 +39,11 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
         return createLayerView() as! LNDCoachmarkOverlayView
     }()
     
-    private var _previousView: UIView {
-        return _views[max(0, _currentIndex)]
-    }
-    private var _nextView: UIView {
-        return _views[min(_views.count-1, _currentIndex)]
-    }
+    private lazy var _layerContainerView: UIView = {
+        let view = UIView(frame: .zero)
+        view.backgroundColor = .clear
+        return view
+    }()
     
     // MARK: - View Lifecycle
 
@@ -71,36 +71,52 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     }
     
     private func setupViews() {
-        view.backgroundColor = UIColor.green.withAlphaComponent(0.2)
+        setupContainerView()
         setupLayerView()
     }
     
-    private func setupLayerView() {
-        view.addSubview(_layerView)
-        _layerView.anchorToSuperview()
+    private func setupContainerView() {
+        view.addSubview(_layerContainerView)
+        _layerContainerView.translatesAutoresizingMaskIntoConstraints = false
+        _layerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        _layerContainerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        _layerContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        _layerContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5).isActive = true
+        
+        _layerContainerView.layer.cornerRadius = 25
     }
     
-    var transparentPath: CGPath?
+    private func setupLayerView() {
+        _layerContainerView.addSubview(_layerView)
+        _layerView.layer.cornerRadius = _layerContainerView.layer.cornerRadius
+        _layerView.translatesAutoresizingMaskIntoConstraints = false
+        _layerView.bottomAnchor.constraint(equalTo: _layerContainerView.bottomAnchor).isActive = true
+        _layerView.widthAnchor.constraint(equalTo: _layerContainerView.widthAnchor).isActive = true
+        _layerView.centerXAnchor.constraint(equalTo: _layerContainerView.centerXAnchor).isActive = true
+        _layerView.centerYAnchor.constraint(equalTo: _layerContainerView.centerYAnchor).isActive = true
+        
+    }
     
     private func createLayerView() -> UIView {
-        return LNDCoachmarkOverlayView(color: UIColor.green.withAlphaComponent(0.5), transparentViewSize: CGSize(width: 50, height: 50))
+        return LNDCoachmarkOverlayView(color: UIColor.blue.withAlphaComponent(0.9), transparentViewSize: .zero)
     }
     
     private func moveToNext() {
         _currentIndex += 1
         guard _currentIndex < _views.count else {
-            _currentIndex = 0
-            animateToNextView()
-//            dismiss(animated: true) {
-//                print("completed")
-//            }
+//            _currentIndex = 0
+//            animateToNextView()
+            dismiss(animated: true) {
+                print("completed")
+            }
             return
         }
         animateToNextView()
     }
     
     private func animateToNextView() {
-        _layerView.moveTo(rect: _nextView.frame, radius: _nextView.layer.cornerRadius)
+        _layerView.moveTo(rect: _nextView.convert(_nextView.bounds, to: _layerView),
+                          radius: _nextView.layer.cornerRadius)
     }
     
 }

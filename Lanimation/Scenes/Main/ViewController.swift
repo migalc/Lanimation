@@ -8,15 +8,48 @@
 
 import UIKit
 
-class ViewController: LNDBaseViewController {
+protocol VCDelegate: class {
+    func showCoachmarks()
+}
 
+class ViewController: LNDBaseViewController {
+    
+    weak var delegate: VCDelegate?
+    
+    var vcId: Int = -1 {
+        didSet {
+            var image = iconsImageNameList[2]
+            if vcId >= 0 {
+                title = "View \(vcId+1)"
+                image = iconsImageNameList[vcId]
+            }
+            
+            setTabItem(with: UIImage(systemName: image)!, text: title)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        view.backgroundColor = .white
+        setupView()
         
-        title = "View 1"
-        tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 1)
+    }
+    
+    private let iconsImageNameList: [String] = ["pencil", "square.and.pencil", "airplayaudio", "arkit", "safari"]
+    
+    private func setupView() {
+        view.backgroundColor = .white
+        let button = UIButton(frame: .zero)
+        button.titleLabel?.text = "Show coachmarks"
+        button.addTarget(self, action: #selector(showCoachmarks), for: .touchUpInside)
+        view.addSubview(button)
+        
+        button.anchorToSuperview()
+    }
+    
+    @objc
+    func showCoachmarks() {
+        delegate?.showCoachmarks()
     }
 
 }

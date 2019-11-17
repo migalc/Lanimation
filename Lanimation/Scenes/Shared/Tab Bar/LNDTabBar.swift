@@ -11,8 +11,12 @@ import UIKit
 // MARK: Protocols
 
 protocol LNDTabBarProtocol {
-    func getTabItems() -> [LNDTabBarItem]
+    func getTabItems() -> [UIView]
     func setTabItems(with views: [UIView])
+}
+
+protocol LNDTabBarDelegate: class {
+    func didTapButton(with tag: Int)
 }
 
 // MARK: Tab Bar Implementation
@@ -21,8 +25,9 @@ class LNDTabBar: LNDBaseView {
     
     // MARK: Properties
     
-    private var containerStackView: UIStackView!
-    private var iconImage: [UIImage] = []
+    weak var delegate: LNDTabBarDelegate?
+    private var _containerStackView: UIStackView!
+    private lazy var _viewControllers: [LNDBaseViewController] = []
     
     // MARK: Initializers
     
@@ -43,12 +48,14 @@ class LNDTabBar: LNDBaseView {
     
     // MARK: Protocol functions
     
-    func setTabItems(with views: [LNDTabBarItem]) {
-        views.forEach { containerStackView.addArrangedSubview($0) }
+    func setTabItems(for viewControllers: [LNDBaseViewController]) {
+        _viewControllers = viewControllers
+        setTabItems(with: viewControllers.map { $0.lndTabItem })
     }
     
-    func getTabItems() -> [LNDTabBarItem] {
-        return containerStackView.arrangedSubviews.compactMap { $0 as? LNDTabBarItem }
+    func getTabItems() -> [UIView] {
+        return _containerStackView.arrangedSubviews
+            .compactMap { ($0 as? LNDTabBarItem)?.contentView }
     }
     
     // MARK: Private functions
@@ -63,13 +70,34 @@ class LNDTabBar: LNDBaseView {
         let stackView = UIStackView(frame: .zero)
         stackView.axis = .horizontal
         stackView.alignment = .fill
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fillEqually
         
         addSubview(stackView)
         
-        stackView.anchorToSuperview()
-        
-        containerStackView = stackView
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        stackView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+        stackView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        stackView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        _containerStackView = stackView
+    }
+    
+    private func setTabItems(with views: [LNDTabBarItem]) {
+        _containerStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        views.forEach {
+            $0.delegate = self
+            _containerStackView.addArrangedSubview($0)
+        }
+    }
+    
+}
+
+// MARK: Extensions
+
+extension LNDTabBar: LNDTabBarItemDelegate {
+    
+    func didTapButton(with tag: Int) {
+        delegate?.didTapButton(with: tag)
     }
     
 }

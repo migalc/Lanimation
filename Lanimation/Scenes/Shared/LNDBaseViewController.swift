@@ -15,9 +15,9 @@ import UIKit
 class LNDBaseViewController: UIViewController {
     
     // MARK: Properties
-    var lndTabItem: LNDTabBarItem {
+    lazy var lndTabItem: LNDTabBarItem = {
         return LNDTabBarItem(image: tabImage, text: tabText)
-    }
+    }()
     
     private var tabImage: UIImage = UIImage(systemName: "airplayaudio")!
     private var tabText: String?

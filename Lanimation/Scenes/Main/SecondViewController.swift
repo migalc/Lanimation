@@ -17,6 +17,8 @@ class SecondViewController: LNDBaseViewController {
         title = "View 2"
         view.backgroundColor = .red
         tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 2)
+        
+        setTabItem(with: UIImage(systemName: "pencil")!, text: title)
     }
     
 

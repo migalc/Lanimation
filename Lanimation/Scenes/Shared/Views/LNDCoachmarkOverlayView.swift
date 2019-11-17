@@ -28,10 +28,9 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
     private lazy var _originRadius: CGFloat = 0
     private lazy var _destinationPath: CGPath! = nil
     private lazy var _transparentLayer: CAShapeLayer? = nil
-    
     private var _scaleFactor: CGFloat = 0.85
-    
     private var _extraRadius: CGFloat = 4
+    private let _translationAnimationTotal: Double = 0.5
     
     // MARK: Initializers
     
@@ -92,15 +91,16 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
         return [scaleAnimations, translationAnimations].flatMap { $0 }
     }
     
+    
+    
     private func initializeTransparentView() {
         _originRect = _destinationRect
         _originRadius = _destinationRadius
-        
-        let transform = CGAffineTransform(translationX: _transparentViewSize.width * _scaleFactor/2, y: _transparentViewSize.height * _scaleFactor/2)
+        let originCenter: CGPoint = _originRect.getCenter()
         
         _transparentLayer = CALayer.createTransparentLayer(viewRect: frame,
                                                            viewColor: _overlayColor,
-                                                           targetOrigin: calculateMidpoint(between: _originRect.origin.applying(transform), and: _destinationRect.origin.applying(transform)),
+                                                           targetOrigin: originCenter,
                                                            targetWidth: 0,
                                                            targetHeight: 0,
                                                            cornerRadius: _destinationRadius,
@@ -120,7 +120,7 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
         scaleAnimation.delegate = self
         scaleAnimation.fromValue = _destinationPath
         scaleAnimation.toValue = newLayer.path
-        scaleAnimation.beginTime = 1
+        scaleAnimation.beginTime = _translationAnimationTotal
         scaleAnimation.duration = 0.2
         scaleAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
         
@@ -131,7 +131,7 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
     
     private func createTranslationAnimations(isInitial: Bool) -> [CAAnimation] {
         let factor: CGFloat = isInitial ? 1 : _scaleFactor
-        let firstAnimation = createFirstTranslationAnimation(targetSize: CGSize(width: _transparentViewSize.width * factor, height: _transparentViewSize.height * factor))
+        let firstAnimation = createFirstTranslationAnimation(targetSize: CGSize(width: _destinationRect.width * factor, height: _destinationRect.height * factor))
         let secondAnimation = createSecondTranslationAnimation(from: firstAnimation)
         return [firstAnimation, secondAnimation]
     }
@@ -148,7 +148,7 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
         animation.delegate = self
         animation.fromValue = _transparentLayer?.path
         animation.toValue = newLayer.path
-        animation.duration = 0.5
+        animation.duration = _translationAnimationTotal / 2
         animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
         
         return animation
@@ -167,7 +167,7 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
         animation2.fromValue = firstAnimation.toValue
         animation2.toValue = newLayer2.path
         animation2.beginTime = firstAnimation.duration
-        animation2.duration = 0.5
+        animation2.duration = _translationAnimationTotal / 2
         animation2.timingFunction = CAMediaTimingFunction(name: .easeOut)
         
         _destinationPath = newLayer2.path
@@ -194,4 +194,15 @@ extension LNDCoachmarkOverlayView: CAAnimationDelegate {
         guard flag else { return }
         _transparentLayer?.path = _destinationPath
     }
+}
+
+extension CGRect {
+    
+    func getCenter() -> CGPoint {
+        let x = origin.x + width / 2
+        let y = origin.y + height / 2
+        
+        return CGPoint(x: x, y: y)
+    }
+    
 }
