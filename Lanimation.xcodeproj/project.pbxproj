@@ -226,6 +226,7 @@
 			children = (
 				8CB9723723801E8500C8DEC2 /* LNDCoachmarkHandlerViewController.swift */,
 				8C30964D238177C6001107BF /* LNDCoachmarkHandlerViewViewModel.swift */,
+				8CFE5D9023805F5A00CAB20E /* LNDCoachmarkOverlayView.swift */,
 			);
 			path = Coachmark;
 			sourceTree = "<group>";
@@ -246,7 +247,6 @@
 				8C19EDB4238013FB008D5ECB /* Tab Bar */,
 				8C3096562381B0DD001107BF /* Navigation Bar */,
 				8C309653238191DD001107BF /* Label */,
-				8CFE5D9023805F5A00CAB20E /* LNDCoachmarkOverlayView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
