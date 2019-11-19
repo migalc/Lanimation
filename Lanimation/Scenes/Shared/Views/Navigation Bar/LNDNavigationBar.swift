@@ -87,7 +87,6 @@ class LNDNavigationBar: LNDBaseView, LNDNavigationBarProtocol {
         _leftButton.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 20).isActive = true
         _leftButton.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor).isActive = true
         _leftButton.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, multiplier: 0.75).isActive = true
-//        _leftButton.widthAnchor.constraint(equalTo: _leftButton.heightAnchor).isActive = true
     }
     
     private func setupRightButton() {

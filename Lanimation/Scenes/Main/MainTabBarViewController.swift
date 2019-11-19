@@ -86,7 +86,7 @@ extension MainTabBarViewController: UIViewControllerTransitioningDelegate {
 }
 
 extension MainTabBarViewController: LNDCoachmarkHandlerViewDelegate {
-    func willEndAnimation(for view: UIView) {
+    func didEndAnimation(for view: UIView) {
         view.animateColor(color: UIColor.white.withAlphaComponent(0.5))
     }
 }

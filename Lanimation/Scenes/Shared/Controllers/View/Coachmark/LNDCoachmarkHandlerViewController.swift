@@ -11,7 +11,7 @@ import UIKit
 // MARK: - Protocols
 
 protocol LNDCoachmarkHandlerViewDelegate: class {
-    func willEndAnimation(for view: UIView)
+    func didEndAnimation(for view: UIView)
 }
 
 protocol LNDCoachmarkHandlerView {
@@ -37,6 +37,7 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     private lazy var _navigationBar: LNDNavigationBar = {
         let navigationBar = LNDNavigationBar(rightButtonText: _viewModel.navigationBarRightButtonTitle)
         navigationBar.delegate = self
+        navigationBar.enableRightButton(enable: false)
         return navigationBar
     }()
     
@@ -227,7 +228,9 @@ private extension LNDCoachmarkHandlerViewController {
                        options: [],
                        animations: {
             self._lblCurrentDescription.alpha = 1
-        }, completion: nil)
+        }, completion: { _ in
+            self._navigationBar.enableRightButton(enable: true)
+        })
         return
     }
     
@@ -245,10 +248,11 @@ private extension LNDCoachmarkHandlerViewController {
             self._lblCurrentTitle = self._lblNextTitle
         })
         
-        animateConstraints(for: _lblCurrentDescription, nextLabel: _lblNextDescription, delay: _viewModel.animationDuration / 4, completion: { [weak self] _ in
+        animateConstraints(for: _lblCurrentDescription, nextLabel: _lblNextDescription, delay: _viewModel.animationDuration / 5, completion: { [weak self] _ in
             guard let self = self else { return }
             self._lblCurrentDescription.removeFromSuperview()
             self._lblCurrentDescription = self._lblNextDescription
+            self._navigationBar.enableRightButton(enable: true)
         })
         
         self._centerXLabelConstraints = self._nextLabelsCenterXLabelConstraints
@@ -268,18 +272,20 @@ private extension LNDCoachmarkHandlerViewController {
 }
 
 extension LNDCoachmarkHandlerViewController: LNDCoachmarkOverlayViewDelegate {
-    func willEndAnimation() {
-        delegate?.willEndAnimation(for: _viewModel.nextView)
+    
+    func didEndAnimation() {
+        delegate?.didEndAnimation(for: _viewModel.nextView)
     }
     
-    func toggledUserInteraction(isEnabled: Bool) {
-        _navigationBar.enableRightButton(enable: isEnabled)
+    func disabledUserInteraction() {
+        _navigationBar.enableRightButton(enable: false)
     }
 }
 
 extension LNDCoachmarkHandlerViewController: LNDNavigationBarDelegate {
     
     func tappedNext() {
+        _navigationBar.enableRightButton(enable: false)
         moveToNext()
     }
     
