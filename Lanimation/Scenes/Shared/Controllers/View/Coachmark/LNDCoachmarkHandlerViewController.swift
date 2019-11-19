@@ -65,13 +65,6 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
         view.backgroundColor = .clear
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        _lblCurrentTitle.text = _viewModel.getTitle()
-        _lblCurrentDescription.text = _viewModel.getDescription()
-        animateInitialLabels()
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         moveToNext()
@@ -190,6 +183,9 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     
     private func moveToNext() {
         _viewModel.incrementIndex()
+        guard !_viewModel.isAtStart() else {
+            return startCoachmarks()
+        }
         guard !_viewModel.isAtEnd() else {
             return dismissView()
         }
@@ -205,6 +201,14 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
     
     private func dismissView() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    private func startCoachmarks() {
+        _lblCurrentTitle.text = _viewModel.getTitle()
+        _lblCurrentDescription.text = _viewModel.getDescription()
+        animateInitialLabels()
+        handleNavigationBar()
+        animateToNextView()
     }
     
 }

@@ -26,6 +26,7 @@ protocol LNDCoachmarkHandlerViewModelProtocol {
     var navigationBarRightButtonTitle: String { get }
     
     func isLastView() -> Bool
+    func isAtStart() -> Bool
     func isAtEnd() -> Bool
     func incrementIndex(by value: Int)
     func getTitle() -> String
@@ -79,11 +80,14 @@ class LNDCoachmarkHandlerViewViewModel: LNDCoachmarkHandlerViewModelProtocol {
     var navigationBarRightButtonTitle: String { return isLastView() ? "Done" : "Next" }
     
     // MARK: Protocol functions
-    
     func isLastView() -> Bool {
         return _currentIndex == _items.count - 1
     }
     
+    func isAtStart() -> Bool {
+        return _currentIndex == 0
+    }
+
     func isAtEnd() -> Bool {
         return _currentIndex == _items.count
     }
