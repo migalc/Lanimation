@@ -38,12 +38,11 @@ class ViewController: LNDBaseViewController {
     private let iconsImageNameList: [String] = ["pencil", "square.and.pencil", "airplayaudio", "arkit", "safari"]
     
     private func setupView() {
-        view.backgroundColor = .systemPurple
-        let button = UIButton(frame: .zero)
-        button.titleLabel?.text = "Show coachmarks"
+        view.backgroundColor = .systemGray2
+        let button = UIButton(type: .roundedRect)
+        button.setTitle("Show coachmarks", for: .init())
         button.addTarget(self, action: #selector(showCoachmarks), for: .touchUpInside)
         view.addSubview(button)
-        
         button.anchorToSuperview()
     }
     
