@@ -31,11 +31,6 @@ class LNDTabBar: LNDBaseView {
     private let _heightConstant: CGFloat = 60
     
     // MARK: Initializers
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        heightAnchor.constraint(equalToConstant: _heightConstant + safeAreaInsets.bottom).isActive = true
-    }
 
     override init(frame: CGRect) {
         super.init(frame: .zero)

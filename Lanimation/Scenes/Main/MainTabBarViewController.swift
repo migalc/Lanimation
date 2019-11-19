@@ -38,7 +38,7 @@ class MainTabBarViewController: UIViewController {
         setupVC()
         setupTabBar()
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         showCoachmarks()
@@ -52,7 +52,7 @@ class MainTabBarViewController: UIViewController {
         tabBar.bottomAnchor.constraint(equalToSystemSpacingBelow: view.bottomAnchor, multiplier: 1).isActive = true
         tabBar.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
         tabBar.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
-        tabBar.heightAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
+        tabBar.heightAnchor.constraint(greaterThanOrEqualToConstant: 95).isActive = true
     }
     
     private func setupVC() {

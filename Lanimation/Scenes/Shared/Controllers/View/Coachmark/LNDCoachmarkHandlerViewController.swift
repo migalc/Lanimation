@@ -77,11 +77,6 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
         moveToNext()
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        view.layoutIfNeeded()
-    }
-    
     // MARK: - Protocol functions
     
     func setViewModel(for viewModel: LNDCoachmarkHandlerViewViewModel) {
@@ -240,11 +235,18 @@ private extension LNDCoachmarkHandlerViewController {
     private func animateLabels() {
         addNextLabels()
         
-        animateConstraints(for: _lblCurrentTitle, nextLabel: _lblNextTitle, completion: nil)
-        animateConstraints(for: _lblCurrentDescription, nextLabel: _lblNextDescription, delay: _viewModel.animationDuration / 4, completion: nil)
+        animateConstraints(for: _lblCurrentTitle, nextLabel: _lblNextTitle, completion: { [weak self] _ in
+            guard let self = self else { return }
+            self._lblCurrentTitle.removeFromSuperview()
+            self._lblCurrentTitle = self._lblNextTitle
+        })
         
-        self._lblCurrentTitle = self._lblNextTitle
-        self._lblCurrentDescription = self._lblNextDescription
+        animateConstraints(for: _lblCurrentDescription, nextLabel: _lblNextDescription, delay: _viewModel.animationDuration / 4, completion: { [weak self] _ in
+            guard let self = self else { return }
+            self._lblCurrentDescription.removeFromSuperview()
+            self._lblCurrentDescription = self._lblNextDescription
+        })
+        
         self._centerXLabelConstraints = self._nextLabelsCenterXLabelConstraints
     }
     
