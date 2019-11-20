@@ -18,7 +18,11 @@ class SecondViewController: LNDBaseViewController {
         view.backgroundColor = .red
         tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 2)
         
-        setTabItem(with: UIImage(systemName: "pencil")!, text: title)
+        if #available(iOS 13.0, *) {
+            setTabItem(with: UIImage(systemName: "pencil")!, text: title)
+        } else {
+            // Fallback on earlier versions
+        }
     }
     
 

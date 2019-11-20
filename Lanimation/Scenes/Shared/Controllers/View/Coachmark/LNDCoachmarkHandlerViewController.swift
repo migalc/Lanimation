@@ -103,11 +103,16 @@ class LNDCoachmarkHandlerViewController: LNDBaseViewController, LNDCoachmarkHand
         _layerContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         _layerContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1).isActive = true
         
+        let corners = [CACornerMask(rawValue: UIRectCorner.topLeft.rawValue), CACornerMask(rawValue: UIRectCorner.topRight.rawValue)]
+        
         _layerContainerView.layer.cornerRadius = 25
+        _layerContainerView.layer.maskedCorners = CACornerMask(corners)
+        
     }
     
     private func setupLayerView() {
         _layerContainerView.addSubview(_layerView)
+        _layerView.layer.maskedCorners = _layerContainerView.layer.maskedCorners
         _layerView.layer.cornerRadius = _layerContainerView.layer.cornerRadius
         _layerView.translatesAutoresizingMaskIntoConstraints = false
         _layerView.bottomAnchor.constraint(equalTo: _layerContainerView.bottomAnchor).isActive = true

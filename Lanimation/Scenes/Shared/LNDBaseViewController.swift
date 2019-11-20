@@ -19,7 +19,7 @@ class LNDBaseViewController: UIViewController {
         return LNDTabBarItem(image: tabImage, text: tabText)
     }()
     
-    private var tabImage: UIImage = UIImage(systemName: "airplayaudio")!
+    private var tabImage: UIImage = UIImage(named: "Legend")!
     private var tabText: String?
     
     // MARK: Lifecycle

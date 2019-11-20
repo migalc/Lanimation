@@ -18,13 +18,19 @@ class ViewController: LNDBaseViewController {
     
     var vcId: Int = -1 {
         didSet {
-            var image = iconsImageNameList[2]
+            var imageName = getIconName(for: 2)
             if vcId >= 0 {
                 title = "View \(vcId+1)"
-                image = iconsImageNameList[vcId]
+                imageName = getIconName(for: vcId)
             }
             
-            setTabItem(with: UIImage(systemName: image)!, text: title)
+            var image: UIImage!
+            if #available(iOS 13.0, *) {
+                image = UIImage(systemName: imageName)!
+            } else {
+                image = UIImage(named: imageName)!
+            }
+            setTabItem(with: image, text: title)
         }
     }
     
@@ -35,10 +41,19 @@ class ViewController: LNDBaseViewController {
         
     }
     
-    private let iconsImageNameList: [String] = ["pencil", "square.and.pencil", "airplayaudio", "arkit", "safari"]
+    func getIconName(for index: Int) -> String {
+        var list = [String]()
+        if #available(iOS 13.0, *) {
+            list = ["pencil", "square.and.pencil", "airplayaudio", "arkit", "safari"]
+        } else {
+            list = ["Legend", "Legend", "Legend", "Legend", "Legend"]
+        }
+        
+        return list[index]
+    }
     
     private func setupView() {
-        view.backgroundColor = .systemGray2
+        view.backgroundColor = .gray
         let button = UIButton(type: .roundedRect)
         button.setTitle("Show coachmarks", for: .init())
         button.addTarget(self, action: #selector(showCoachmarks), for: .touchUpInside)
