@@ -192,7 +192,7 @@ class LNDCoachmarkOverlayView: LNDBaseView, LNDCoachmarkOverlayViewProtocol {
         animation2.timingFunction = CAMediaTimingFunction(name: .easeOut)
         
         _destinationPath = newLayer2.path
-        
+        _transparentLayer?.path = _destinationPath
         return animation2
     }
     
@@ -215,7 +215,5 @@ extension LNDCoachmarkOverlayView: CAAnimationDelegate {
         print("didstop, finished = \(flag)")
         print("\(#function) - \(Date())")
         delegate?.didEndAnimation()
-        guard flag else { return }
-        _transparentLayer?.path = _destinationPath
     }
 }
